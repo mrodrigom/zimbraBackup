@@ -1,7 +1,8 @@
 #!/bin/bash
 ###############################################################################
 # Script made by M. Rodrigo Monteiro                                          #
-# Any bug, improvement or anything: mail me.                                  #
+# Any bug or request, below is my blog and mail                               #
+# http://www.rodrigomonteiro.net/blog/                                        #
 # E-mail: falecom@rodrigomonteiro.net                                         #
 # https://github.com/mrodrigom/zimbraBackup                                   #
 # Use at your own risk                                                        #
