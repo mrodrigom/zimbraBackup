@@ -3,25 +3,32 @@
 # Script made by M. Rodrigo Monteiro                                          #
 # Any bug, improvement or anything: mail me.                                  #
 # E-mail: falecom@rodrigomonteiro.net                                         #
+# https://github.com/mrodrigom/zimbraBackup                                   #
+# Use at your own risk                                                        #
 #                                                                             #
 # Instructions:                                                               #
 #                                                                             #
-# The default directory for the scripts is /dados/scripts/zimbraBackup        #
-#   mkdir -p /dados/scripts/zimbraBackup                                      #
+# The default directory for the scripts is /opt/scripts/zimbraBackup          #
+#   mkdir -p /opt/scripts/zimbraBackup                                        #
 #                                                                             #
-# The default directory for backup is /dados/backupZimbra                     #
-#   mkdir -p /dados/backupZimbra/{today,week}                                 #
+# The default directory for backup is /opt/backupZimbra                       #
+#   mkdir -p /opt/backupZimbra/{today,week}                                   #
+#                                                                             #
+# The script saves all days in "today" except the sunday in "week"            #
+# If you wish to have only the daily backup, symlink "week" to "today"        #
 #                                                                             #
 # User 'zimbra' must have write permission on backup directory                #
-#   chown -R zimbra.zimbra /dados/backupZimbra                                #
+#   chown -R zimbra.zimbra /opt/backupZimbra                                  #
 #                                                                             #
-# Must run as root                                                            #
+# Must run script as root                                                     #
 #                                                                             #
-# Put in crontab                                                              #
-#   echo '0 20 * * * root /dados/scripts/zimbraBackup/zimbraBackup.sh' \      #
+# Put in crontab (multi-line escaped command)                                 #
+#   echo '0 20 * * * root /opt/scripts/zimbraBackup/zimbraBackup.sh' \        #
 #       >> /etc/crontab                                                       #
 #                                                                             #
-# To restore the backup (multi-line escaped command)                          #
+# The concurrency (mail backups in parallel) is 3                             #
+#                                                                             #
+# To restore the mail backup (multi-line escaped command)                     #
 #   zmmailbox -z -m \                                                         #
 #      john@doe.com \                                                         #
 #      postRestURL "//?fmt=tgz&resolve=skip" \                                #
@@ -44,12 +51,14 @@
 #   Add contact                                                               #
 #   Add calendar                                                              #
 #   Add tasks                                                                 #
-# Version 0.7                                                                 #
+# Version 0.7 (06/10/2014)                                                    #
 #   Changed crontab                                                           #
-#                                                                             #
+# Version 0.8 (13/10/2014)                                                    #
+#   Added project to github                                                   #
+#   Changed the default directory                                             #
 ###############################################################################
 
-version=0.7
+version=0.8
 
 # CHANGE HERE
 bzip2="/usr/bin/bzip2"
@@ -59,14 +68,20 @@ mysqldump="/opt/zimbra/mysql/bin/mysqldump"
 mysqlsock="/opt/zimbra/db/mysql.sock"
 zmlocalconfig="/opt/zimbra/bin/zmlocalconfig"
 zmslapcat="/opt/zimbra/libexec/zmslapcat"
-backupDir="/dados/backupZimbra"
+backupDir="/opt/backupZimbra"
 
 
 
 # DO NOT CHANGE BELOW HERE
 
+unalias rm > /dev/null 2>&1
 exec 1> "${backupDir}"/zimbraBackup-"$(date +%F)".log
 exec 2> "${backupDir}"/zimbraBackup-"$(date +%F)".err
+
+if [ "$#" -gt 1 -o "${1}" = "-h" -o "${1}" = "--help" ] ; then
+	echo "Usage: $0 [concurrency]"
+	exit 1
+fi
 
 maxConcurrency="${1:-3}"
 
