@@ -19,7 +19,7 @@
 #                                                                             #
 # Put in crontab                                                              #
 #   echo '0 20 * * * root /dados/scripts/zimbraBackup/zimbraBackup.sh' \      #
-#		>> /etc/crontab                                                       #
+#       >> /etc/crontab                                                       #
 #                                                                             #
 # To restore the backup (multi-line escaped command)                          #
 #   zmmailbox -z -m \                                                         #
