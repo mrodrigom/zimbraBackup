@@ -9,6 +9,7 @@
 # Tested on CentOS Linux release 7.2 64 bits                                  #
 #                                                                             #
 # Instructions:                                                               #
+# yum install epel-release                                                    #
 # yum install parallel gawk bzip2 iproute                                     #
 #                                                                             #
 # Script to backup Zimbra (MySQL + OpenLDAP + Mail + Contacts + Calendar +    #
