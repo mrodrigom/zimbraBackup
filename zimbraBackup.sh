@@ -11,6 +11,10 @@
 # Instructions:                                                               #
 # yum install epel-release                                                    #
 # yum install parallel gawk bzip2 iproute                                     #
+# # rpm -qa | grep parallel                                                   #
+#parallel-20160222-1.el7.noarch                                               #
+#                                                                             #
+# CentOS 6: https://gist.github.com/mkubenka/434422ca63e4fc647d6bce579e8c20f8 #
 #                                                                             #
 # Script to backup Zimbra (MySQL + OpenLDAP + Mail + Contacts + Calendar +    #
 #   Tasks + Lists + User Attributes)                                          #
